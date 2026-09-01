@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>2026 남악고 스포츠 토너먼트</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f5f7;color:#1a1a1a;font-size:15px;line-height:1.5}
+body{min-height:100vh;padding-bottom:20px}
+
+/* HERO - offwhite, no circles */
+.hero{position:relative;background:#faf7f2;color:#1a1a1a;padding:32px 20px 26px;border-bottom:1px solid #ebe6dc}
+.hero-inner{position:relative;z-index:1;text-align:center;max-width:720px;margin:0 auto}
+.hero-sub{font-size:12px;letter-spacing:4px;font-weight:700;color:#dc2626;margin-bottom:10px}
+.hero-title{font-size:34px;font-weight:900;letter-spacing:-1px;line-height:1.15;margin-bottom:8px;color:#1a1a1a}
+.hero-title .accent{color:#dc2626}
+.hero-tag{font-size:13px;font-weight:600;color:#666;margin-top:10px}
+.hero-badges{display:flex;justify-content:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+.hero-badge{background:#fff;border:1px solid #e5e5e7;color:#333;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:0.5px}
+
+/* TABS */
+.tabs{background:#fff;border-bottom:1px solid #e5e5e7;position:sticky;top:0;z-index:100;display:flex;overflow-x:auto;scrollbar-width:none;max-width:720px;margin:0 auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:14px 14px;font-size:13px;font-weight:700;color:#666;border:none;background:none;cursor:pointer;position:relative;white-space:nowrap;transition:color 0.15s;font-family:inherit}
+.tab.active{color:#dc2626}
+.tab.active::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:#dc2626}
+.tab.locked{color:#bbb}
+.tab.locked::before{content:"\1F512  ";font-size:10px}
+
+/* CONTENT */
+.content{padding:16px 14px;max-width:720px;margin:0 auto}
+.today-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+.today-date{font-size:22px;font-weight:900;color:#1a1a1a;line-height:1.1}
+.today-date .day{font-size:13px;font-weight:600;color:#666;margin-left:6px}
+.today-count{background:#dc2626;color:#fff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:800}
+
+.date-picker{width:100%;padding:10px 12px;border:1px solid #e5e5e7;border-radius:8px;font-size:14px;margin-bottom:14px;background:#fff;font-family:inherit;font-weight:600}
+
+/* VENUE HEADER */
+.venue-header{font-size:14px;font-weight:900;color:#1a1a1a;padding:10px 4px 8px;border-bottom:2px solid #1a1a1a;margin:16px 0 10px}
+.venue-header:first-of-type{margin-top:4px}
+
+/* MATCH CARDS */
+.match-card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #e5e5e7;display:flex;align-items:center;gap:14px}
+.match-time{flex:0 0 auto;text-align:center;min-width:60px;padding-right:12px;border-right:1px solid #e5e5e7}
+.match-time-big{font-size:22px;font-weight:900;color:#dc2626;line-height:1;letter-spacing:-0.5px}
+.match-body{flex:1;min-width:0}
+.match-meta{display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+.match-sport{font-size:12px;font-weight:800;background:#1a1a1a;color:#fff;padding:2px 7px;border-radius:4px}
+.match-grade{font-size:12px;font-weight:700;color:#666;background:#f0f0f2;padding:2px 7px;border-radius:4px}
+.match-priority{font-size:11px;font-weight:700;color:#f59e0b;background:#fef3c7;padding:2px 7px;border-radius:4px}
+.match-teams{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:800;flex-wrap:wrap}
+.team-name{color:#1a1a1a}
+.team-name.winner{color:#dc2626}
+.team-name.loser{color:#999;text-decoration:line-through;text-decoration-thickness:1px}
+.team-name.tbd{color:#bbb;font-weight:600}
+.vs{font-size:11px;color:#999;font-weight:700}
+.match-score{margin-left:auto;font-size:14px;font-weight:800;color:#1a1a1a;background:#f5f5f7;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.match-label{font-size:11px;color:#666;font-weight:700;margin-top:3px}
+.empty{text-align:center;padding:60px 20px;color:#999;background:#fff;border-radius:12px;border:1px dashed #e5e5e7}
+
+/* NOTICE */
+.notice-card{margin-top:20px;padding:14px;border-radius:12px;border:1px solid #e5e5e7;background:#fff}
+.notice-card.urgent{background:#fee2e2;border-color:#dc2626}
+.notice-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.notice-label{font-size:11px;font-weight:800;color:#666;letter-spacing:1.5px}
+.notice-card.urgent .notice-label{color:#dc2626}
+.notice-region{font-size:10px;color:#999;font-weight:600}
+.notice-body{font-size:13px;color:#1a1a1a;line-height:1.6;white-space:pre-wrap;min-height:20px}
+.notice-empty{color:#bbb;font-style:italic;font-size:12px}
+.notice-dot{display:inline-block;width:8px;height:8px;background:#dc2626;border-radius:50%;margin-right:6px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0.3}}
+.notice-edit-btn{margin-top:10px;padding:6px 10px;font-size:12px;font-weight:700;background:#f5f5f7;border:1px solid #e5e5e7;border-radius:6px;cursor:pointer;font-family:inherit}
+
+/* BRACKET */
+.bracket-sport-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;scrollbar-width:none}
+.bracket-sport-tabs::-webkit-scrollbar{display:none}
+.bracket-sport-tab{flex:0 0 auto;padding:8px 14px;background:#fff;border:1px solid #e5e5e7;border-radius:20px;font-size:13px;font-weight:700;color:#666;cursor:pointer;white-space:nowrap;font-family:inherit}
+.bracket-sport-tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.bracket-grade-toggle{display:flex;background:#f0f0f2;border-radius:8px;padding:3px;margin-bottom:16px;width:fit-content}
+.grade-btn{padding:7px 18px;background:none;border:none;font-size:13px;font-weight:700;color:#666;cursor:pointer;border-radius:6px;font-family:inherit}
+.grade-btn.active{background:#fff;color:#dc2626}
+
+.bracket-wrap{background:#fff;border-radius:12px;padding:16px 8px;border:1px solid #e5e5e7;overflow-x:auto}
+.bracket-title{text-align:center;font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:14px;padding:0 8px}
+.bracket-champion{text-align:center;padding:10px;background:#fef3c7;border:2px solid #fbbf24;border-radius:8px;margin:0 auto 16px;max-width:280px}
+.bracket-champion-label{font-size:11px;font-weight:800;color:#92400e;letter-spacing:1px;margin-bottom:2px}
+.bracket-champion-name{font-size:20px;font-weight:900;color:#78350f}
+.bracket-champion-empty{color:#d4a574;font-weight:700}
+
+.bracket svg{width:100%;height:auto;display:block;min-width:520px}
+.br-box{fill:#fff;stroke:#d1d5db;stroke-width:1.5}
+.br-box.won{fill:#dc2626;stroke:#991b1b}
+.br-box.lost{fill:#f5f5f7;stroke:#e5e5e7}
+.br-line{stroke:#d1d5db;stroke-width:1.5;fill:none}
+.br-text{font-family:Pretendard,sans-serif;font-size:13px;font-weight:700;fill:#1a1a1a;text-anchor:middle;dominant-baseline:middle}
+.br-text.won{fill:#fff}
+.br-text.lost{fill:#999}
+.br-text.tbd{fill:#bbb;font-weight:600}
+.br-score{font-family:Pretendard,sans-serif;font-size:11px;font-weight:700;fill:#666;text-anchor:middle;dominant-baseline:middle}
+.br-score.won{fill:#fff}
+.br-round-label{font-family:Pretendard,sans-serif;font-size:11px;font-weight:800;fill:#666;text-anchor:middle;letter-spacing:1px}
+
+/* SEED EDIT (admin) */
+.seed-edit-panel{background:#fff8ec;border:1px dashed #f59e0b;border-radius:8px;padding:12px;margin-top:12px}
+.seed-edit-panel h4{font-size:12px;color:#92400e;margin-bottom:8px;font-weight:800}
+.seed-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;font-size:13px}
+.seed-row select{padding:5px 8px;border:1px solid #e5e5e7;border-radius:5px;font-family:inherit;font-size:12px;flex:1}
+.seed-row-label{font-size:11px;font-weight:700;color:#92400e;min-width:36px}
+.seed-save{margin-top:8px;padding:8px;background:#f59e0b;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;font-family:inherit;font-size:12px;width:100%}
+
+/* RESULT INPUT */
+.result-card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #e5e5e7}
+.result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.result-title{font-size:15px;font-weight:800}
+.result-time{font-size:13px;color:#666;font-weight:700}
+.result-scoring{display:flex;align-items:center;gap:8px;margin-top:10px}
+.result-team{flex:1;text-align:center}
+.result-team-name{font-size:14px;font-weight:800;margin-bottom:6px}
+.result-score-input{width:100%;height:44px;font-size:22px;font-weight:900;text-align:center;border:2px solid #e5e5e7;border-radius:8px;font-family:inherit}
+.result-score-input:focus{outline:none;border-color:#dc2626}
+.result-vs{font-size:12px;color:#999;font-weight:700}
+.result-save{width:100%;margin-top:10px;padding:11px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+.result-save.saved{background:#059669}
+.result-clear{width:100%;margin-top:6px;padding:8px;background:#f5f5f7;color:#666;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.result-team-input{width:100%;padding:5px;font-size:12px;text-align:center;border:1px dashed #e5e5e7;border-radius:4px;margin-top:4px;font-family:inherit}
+
+/* PRIORITY MEAL */
+.meal-block{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid #e5e5e7}
+.meal-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f2}
+.meal-title{font-size:15px;font-weight:800;flex:1}
+.meal-time-badge{background:#f59e0b;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:800}
+.meal-team-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.meal-team{background:#fef3c7;border-radius:8px;padding:10px}
+.meal-team-name{font-size:13px;font-weight:800;color:#92400e;margin-bottom:6px}
+.meal-players{font-size:12px;line-height:1.6;color:#78350f}
+.meal-empty-note{font-size:12px;color:#999;font-style:italic}
+
+/* ROSTER */
+.roster-controls{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.roster-select{padding:8px 10px;border:1px solid #e5e5e7;border-radius:8px;font-size:13px;background:#fff;font-family:inherit;font-weight:600;flex:1;min-width:100px}
+.roster-card{background:#fff;border-radius:12px;padding:14px;border:1px solid #e5e5e7}
+.roster-title{font-size:16px;font-weight:900;margin-bottom:4px}
+.roster-sport-label{font-size:12px;color:#666;font-weight:700;margin-bottom:10px}
+.roster-textarea{width:100%;min-height:200px;padding:10px;border:1px solid #e5e5e7;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;line-height:1.7}
+.roster-textarea:focus{outline:none;border-color:#dc2626}
+.roster-hint{font-size:11px;color:#999;margin-top:6px}
+.roster-save{width:100%;margin-top:10px;padding:11px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+.roster-save.saved{background:#059669}
+
+/* ALL SCHEDULE */
+.allsched-item{background:#fff;border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid #e5e5e7;display:flex;gap:12px;align-items:center}
+.allsched-date{flex:0 0 60px;font-size:13px;font-weight:800;color:#dc2626}
+.allsched-date .weekday{font-size:11px;color:#999;font-weight:600;display:block}
+.allsched-body{flex:1;font-size:13px}
+.allsched-meta{font-size:11px;color:#666;font-weight:700;margin-bottom:2px}
+.allsched-teams{font-size:14px;font-weight:800}
+.allsched-result{font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px}
+.allsched-result.win{background:#d1fae5;color:#059669}
+.allsched-result.lose{background:#fee2e2;color:#dc2626}
+
+/* SCHEDULE EDIT (admin) */
+.sched-edit-card{background:#fff;border:1px dashed #f59e0b;border-radius:10px;padding:12px;margin-bottom:10px}
+.sched-edit-row{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.sched-edit-row input,.sched-edit-row select{padding:6px 8px;border:1px solid #e5e5e7;border-radius:5px;font-family:inherit;font-size:12px;flex:1;min-width:80px}
+.sched-edit-actions{display:flex;gap:6px;margin-top:8px}
+.sched-btn{padding:8px 12px;border:none;border-radius:6px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer}
+.sched-btn.primary{background:#dc2626;color:#fff}
+.sched-btn.warn{background:#fef3c7;color:#92400e}
+.sched-btn.danger{background:#f5f5f7;color:#dc2626}
+.sched-add-form{background:#f0fdf4;border:1px dashed #059669;border-radius:10px;padding:12px;margin-bottom:14px}
+.sched-add-form h4{font-size:12px;color:#059669;margin-bottom:8px;font-weight:800}
+
+/* LOGIN */
+.login-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+.login-overlay.show{display:flex}
+.login-box{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:320px}
+.login-title{font-size:16px;font-weight:800;margin-bottom:14px;text-align:center}
+.login-role-picker{display:flex;gap:6px;margin-bottom:12px}
+.login-role{flex:1;padding:10px;background:#f5f5f7;border:2px solid transparent;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;font-family:inherit}
+.login-role.active{background:#fee2e2;border-color:#dc2626;color:#dc2626}
+.login-input{width:100%;padding:11px;border:1px solid #e5e5e7;border-radius:8px;font-size:14px;margin-bottom:10px;font-family:inherit}
+.login-btn{width:100%;padding:11px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-family:inherit}
+.login-cancel{width:100%;padding:8px;background:none;border:none;color:#666;margin-top:6px;font-size:12px;cursor:pointer;font-family:inherit}
+.login-err{color:#dc2626;font-size:12px;text-align:center;margin-bottom:8px;min-height:16px}
+
+/* AUTH BAR */
+.auth-bar{background:#1a1a1a;color:#fff;padding:8px 14px;font-size:12px;display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto}
+.auth-role{font-weight:700}
+.auth-logout{background:none;border:1px solid rgba(255,255,255,0.3);color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+
+@media (min-width:640px){
+  .hero-title{font-size:40px}
+  .hero{padding:38px 20px 30px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-sub">2026 FALL FESTIVAL</div>
+    <div class="hero-title">남악고 <span class="accent">스포츠 토너먼트</span></div>
+    <div class="hero-tag">함께 뛰고, 함께 이기고, 함께 만드는 축제</div>
+    <div class="hero-badges">
+      <span class="hero-badge">8.31 - 10.22</span>
+      <span class="hero-badge">전교생 참여</span>
+      <span class="hero-badge">5개 종목</span>
+    </div>
+  </div>
+</div>
+
+<div id="authBar" class="auth-bar" style="display:none">
+  <span class="auth-role" id="authRole"></span>
+  <button class="auth-logout" onclick="logout()">로그아웃</button>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-tab="today">오늘 경기</button>
+  <button class="tab" data-tab="bracket">대진표</button>
+  <button class="tab" data-tab="allsched">전체 일정</button>
+  <button class="tab locked" data-tab="result" data-role="referee" onclick="requireLogin('referee','result')">결과 입력</button>
+  <button class="tab locked" data-tab="meal" data-role="admin" onclick="requireLogin('admin','meal')">우선 급식</button>
+  <button class="tab locked" data-tab="roster" data-role="admin" onclick="requireLogin('admin','roster')">선수 명단</button>
+  <button class="tab locked" data-tab="edit" data-role="admin" onclick="requireLogin('admin','edit')">일정 편집</button>
+</div>
+
+<div class="content">
+  <div class="pane" id="pane-today">
+    <div class="today-header">
+      <div><div class="today-date" id="todayDate"></div></div>
+      <div class="today-count" id="todayCount">경기 0개</div>
+    </div>
+    <input type="date" class="date-picker" id="datePicker">
+    <div id="matchList"></div>
+    <div class="notice-card" id="noticeCard">
+      <div class="notice-head">
+        <div class="notice-label">긴급 공지</div>
+        <div class="notice-region">전남 무안군</div>
+      </div>
+      <div class="notice-body" id="noticeBody"><span class="notice-empty">등록된 공지가 없습니다.</span></div>
+      <button class="notice-edit-btn" id="noticeEditBtn" onclick="openNoticeEdit()" style="display:none">공지 편집</button>
+    </div>
+  </div>
+
+  <div class="pane" id="pane-bracket" style="display:none">
+    <div class="bracket-sport-tabs" id="bracketSportTabs"></div>
+    <div class="bracket-grade-toggle">
+      <button class="grade-btn active" data-grade="1">1학년</button>
+      <button class="grade-btn" data-grade="2">2학년</button>
+    </div>
+    <div id="bracketBox"></div>
+    <div id="seedEditor" style="display:none"></div>
+  </div>
+
+  <div class="pane" id="pane-allsched" style="display:none">
+    <div class="roster-controls">
+      <select class="roster-select" id="allSchedGrade">
+        <option value="1">1학년</option>
+        <option value="2">2학년</option>
+      </select>
+      <select class="roster-select" id="allSchedClass">
+        <option value="1">1반</option><option value="2">2반</option><option value="3">3반</option><option value="4">4반</option>
+        <option value="5">5반</option><option value="6">6반</option><option value="7">7반</option><option value="8">8반</option>
+      </select>
+    </div>
+    <div id="allSchedList"></div>
+  </div>
+
+  <div class="pane" id="pane-result" style="display:none">
+    <input type="date" class="date-picker" id="datePickerResult">
+    <div id="resultList"></div>
+  </div>
+
+  <div class="pane" id="pane-meal" style="display:none">
+    <input type="date" class="date-picker" id="datePickerMeal">
+    <div id="mealList"></div>
+  </div>
+
+  <div class="pane" id="pane-roster" style="display:none">
+    <div class="roster-controls">
+      <select class="roster-select" id="rosterGrade"><option value="1">1학년</option><option value="2">2학년</option></select>
+      <select class="roster-select" id="rosterClass">
+        <option value="1">1반</option><option value="2">2반</option><option value="3">3반</option><option value="4">4반</option>
+        <option value="5">5반</option><option value="6">6반</option><option value="7">7반</option><option value="8">8반</option>
+      </select>
+      <select class="roster-select" id="rosterSport">
+        <option value="피구">피구 (여)</option>
+        <option value="빅발리볼">빅발리볼 (여)</option>
+        <option value="축구">축구 (남)</option>
+        <option value="농구">농구 (남)</option>
+        <option value="혼성빅발리볼">혼성빅발리볼</option>
+      </select>
+    </div>
+    <div class="roster-card">
+      <div class="roster-title" id="rosterTitle">1학년 1반</div>
+      <div class="roster-sport-label" id="rosterSportLabel">피구</div>
+      <textarea class="roster-textarea" id="rosterText" placeholder="선수 이름을 한 줄에 한 명씩 입력하세요"></textarea>
+      <div class="roster-hint">우선급식 대상 경기(축구·13:25 농구)는 이 명단을 자동으로 우선급식 화면에 표시합니다.</div>
+      <button class="roster-save" id="rosterSaveBtn" onclick="saveRoster()">명단 저장</button>
+    </div>
+  </div>
+
+  <div class="pane" id="pane-edit" style="display:none">
+    <input type="date" class="date-picker" id="datePickerEdit">
+    <div class="sched-add-form">
+      <h4>신규 경기 추가</h4>
+      <div class="sched-edit-row">
+        <input type="date" id="newDate" placeholder="날짜">
+        <input type="text" id="newTime" placeholder="시간 (예: 13:00)" maxlength="5">
+      </div>
+      <div class="sched-edit-row">
+        <select id="newSport"><option>피구</option><option>빅발리볼</option><option>축구</option><option>농구</option><option>혼성빅발리볼</option></select>
+        <select id="newGrade"><option value="1">1학년</option><option value="2">2학년</option></select>
+        <select id="newVenue"><option>체육관</option><option>운동장</option></select>
+      </div>
+      <div class="sched-edit-row">
+        <input type="text" id="newA" placeholder="A팀 (예: 3반)">
+        <input type="text" id="newB" placeholder="B팀 (예: 5반)">
+        <select id="newPriority"><option value="false">일반</option><option value="true">우선급식</option></select>
+      </div>
+      <div class="sched-edit-row">
+        <input type="text" id="newLabel" placeholder="라벨 (선택, 예: 준결승 A)">
+      </div>
+      <button class="sched-btn primary" onclick="addMatch()" style="width:100%">경기 추가</button>
+    </div>
+    <div id="editList"></div>
+  </div>
+</div>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-title">로그인</div>
+    <div class="login-role-picker">
+      <button class="login-role" data-role="referee" onclick="pickRole('referee')">심판</button>
+      <button class="login-role" data-role="admin" onclick="pickRole('admin')">관리자</button>
+    </div>
+    <input type="password" class="login-input" id="loginPw" placeholder="비밀번호">
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" onclick="tryLogin()">로그인</button>
+    <button class="login-cancel" onclick="closeLogin()">취소</button>
+  </div>
+</div>
+
+<script>
+// ===== DATA (initial) =====
+const DEFAULT_SCHEDULE = [{"date": "2026-08-31", "time": "12:55", "sport": "피구", "grade": 1, "a": "4반", "b": "5반", "venue": "체육관", "priority": false}, {"date": "2026-08-31", "time": "13:05", "sport": "피구", "grade": 2, "a": "6반", "b": "7반", "venue": "체육관", "priority": false}, {"date": "2026-08-31", "time": "13:15", "sport": "피구", "grade": 2, "a": "3반", "b": "5반", "venue": "체육관", "priority": false}, {"date": "2026-08-31", "time": "13:10", "sport": "축구", "grade": 1, "a": "4반", "b": "7반", "venue": "운동장", "priority": true}, {"date": "2026-09-01", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "3반", "b": "6반", "venue": "체육관", "priority": false}, {"date": "2026-09-01", "time": "12:55", "sport": "빅발리볼", "grade": 2, "a": "6반", "b": "7반", "venue": "체육관", "priority": false}, {"date": "2026-09-01", "time": "13:25", "sport": "농구", "grade": 1, "a": "3반", "b": "5반", "venue": "체육관", "priority": true}, {"date": "2026-09-01", "time": "13:10", "sport": "축구", "grade": 2, "a": "3반", "b": "8반", "venue": "운동장", "priority": true}, {"date": "2026-09-07", "time": "12:55", "sport": "피구", "grade": 1, "a": "6반", "b": "7반", "venue": "체육관", "priority": false}, {"date": "2026-09-07", "time": "13:25", "sport": "농구", "grade": 2, "a": "7반", "b": "8반", "venue": "체육관", "priority": true}, {"date": "2026-09-07", "time": "13:10", "sport": "축구", "grade": 1, "a": "1반", "b": "6반", "venue": "운동장", "priority": true}, {"date": "2026-09-08", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "1반", "b": "4반", "venue": "체육관", "priority": false}, {"date": "2026-09-08", "time": "12:55", "sport": "빅발리볼", "grade": 2, "a": "3반", "b": "5반", "venue": "체육관", "priority": false}, {"date": "2026-09-08", "time": "13:25", "sport": "농구", "grade": 2, "a": "1반", "b": "2반", "venue": "체육관", "priority": true}, {"date": "2026-09-08", "time": "13:10", "sport": "축구", "grade": 1, "a": "3반", "b": "8반", "venue": "운동장", "priority": true}, {"date": "2026-09-09", "time": "12:55", "sport": "피구", "grade": 1, "a": "1반", "b": "8반", "venue": "체육관", "priority": false}, {"date": "2026-09-09", "time": "13:05", "sport": "피구", "grade": 1, "a": "2반", "b": "3반", "venue": "체육관", "priority": false}, {"date": "2026-09-09", "time": "13:25", "sport": "농구", "grade": 2, "a": "3반", "b": "5반", "venue": "체육관", "priority": true}, {"date": "2026-09-09", "time": "13:10", "sport": "축구", "grade": 1, "a": "2반", "b": "5반", "venue": "운동장", "priority": true}, {"date": "2026-09-10", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "5반", "b": "8반", "venue": "체육관", "priority": false}, {"date": "2026-09-10", "time": "12:55", "sport": "빅발리볼", "grade": 2, "a": "2반", "b": "4반", "venue": "체육관", "priority": false}, {"date": "2026-09-10", "time": "13:25", "sport": "농구", "grade": 1, "a": "6반", "b": "7반", "venue": "체육관", "priority": true}, {"date": "2026-09-10", "time": "13:10", "sport": "축구", "grade": 2, "a": "5반", "b": "6반", "venue": "운동장", "priority": true}, {"date": "2026-09-11", "time": "12:55", "sport": "피구", "grade": 2, "a": "2반", "b": "8반", "venue": "체육관", "priority": false}, {"date": "2026-09-11", "time": "13:05", "sport": "피구", "grade": 2, "a": "1반", "b": "4반", "venue": "체육관", "priority": false}, {"date": "2026-09-11", "time": "13:25", "sport": "농구", "grade": 2, "a": "4반", "b": "6반", "venue": "체육관", "priority": true}, {"date": "2026-09-11", "time": "13:10", "sport": "축구", "grade": 2, "a": "1반", "b": "2반", "venue": "운동장", "priority": true}, {"date": "2026-09-14", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "2반", "b": "7반", "venue": "체육관", "priority": false}, {"date": "2026-09-14", "time": "12:55", "sport": "빅발리볼", "grade": 2, "a": "1반", "b": "8반", "venue": "체육관", "priority": false}, {"date": "2026-09-14", "time": "13:25", "sport": "농구", "grade": 1, "a": "2반", "b": "8반", "venue": "체육관", "priority": true}, {"date": "2026-09-14", "time": "13:10", "sport": "축구", "grade": 2, "a": "4반", "b": "7반", "venue": "운동장", "priority": true}, {"date": "2026-09-15", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 빅발리볼 준결승 A"}, {"date": "2026-09-15", "time": "12:55", "sport": "빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 빅발리볼 준결승 A"}, {"date": "2026-09-15", "time": "13:25", "sport": "농구", "grade": 1, "a": "1반", "b": "4반", "venue": "체육관", "priority": true}, {"date": "2026-09-15", "time": "13:10", "sport": "축구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "운동장", "priority": true, "label": "2학년 축구 준결승 A"}, {"date": "2026-09-16", "time": "12:55", "sport": "피구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 피구 준결승 A"}, {"date": "2026-09-16", "time": "13:05", "sport": "피구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 피구 준결승 B"}, {"date": "2026-09-16", "time": "13:25", "sport": "농구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": true, "label": "2학년 농구 준결승 A"}, {"date": "2026-09-16", "time": "13:10", "sport": "축구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "운동장", "priority": true, "label": "1학년 축구 준결승 A"}, {"date": "2026-09-17", "time": "12:55", "sport": "피구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 피구 준결승 A"}, {"date": "2026-09-17", "time": "13:05", "sport": "피구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 피구 준결승 B"}, {"date": "2026-09-17", "time": "13:25", "sport": "농구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": true, "label": "1학년 농구 준결승 A"}, {"date": "2026-09-17", "time": "13:10", "sport": "축구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "운동장", "priority": true, "label": "2학년 축구 준결승 B"}, {"date": "2026-09-18", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 빅발리볼 준결승 B"}, {"date": "2026-09-18", "time": "13:05", "sport": "빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 빅발리볼 준결승 B"}, {"date": "2026-09-18", "time": "13:25", "sport": "농구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": true, "label": "2학년 농구 준결승 B"}, {"date": "2026-09-18", "time": "13:10", "sport": "축구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "운동장", "priority": true, "label": "1학년 축구 준결승 B"}, {"date": "2026-10-06", "time": "12:55", "sport": "빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 빅발리볼 결승"}, {"date": "2026-10-06", "time": "13:05", "sport": "빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 빅발리볼 결승"}, {"date": "2026-10-06", "time": "13:25", "sport": "농구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": true, "label": "1학년 농구 결승"}, {"date": "2026-10-06", "time": "13:10", "sport": "축구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "운동장", "priority": true, "label": "2학년 축구 결승"}, {"date": "2026-10-07", "time": "12:55", "sport": "피구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 피구 결승"}, {"date": "2026-10-07", "time": "13:05", "sport": "피구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 피구 결승"}, {"date": "2026-10-07", "time": "13:25", "sport": "농구", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": true, "label": "2학년 농구 결승"}, {"date": "2026-10-07", "time": "13:10", "sport": "축구", "grade": 1, "a": "TBD", "b": "TBD", "venue": "운동장", "priority": true, "label": "1학년 축구 결승"}, {"date": "2026-10-12", "time": "12:55", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 1경기"}, {"date": "2026-10-12", "time": "13:05", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 1경기"}, {"date": "2026-10-13", "time": "12:55", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 2경기"}, {"date": "2026-10-13", "time": "13:05", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 2경기"}, {"date": "2026-10-14", "time": "12:55", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 3경기"}, {"date": "2026-10-14", "time": "13:05", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 3경기"}, {"date": "2026-10-15", "time": "12:55", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 4경기"}, {"date": "2026-10-15", "time": "13:05", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 4경기"}, {"date": "2026-10-16", "time": "12:55", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 준결승 A"}, {"date": "2026-10-16", "time": "13:05", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 준결승 B"}, {"date": "2026-10-19", "time": "12:55", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 준결승 A"}, {"date": "2026-10-19", "time": "13:05", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 준결승 B"}, {"date": "2026-10-21", "time": "12:55", "sport": "혼성빅발리볼", "grade": 1, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "1학년 혼성빅발리볼 결승"}, {"date": "2026-10-22", "time": "12:55", "sport": "혼성빅발리볼", "grade": 2, "a": "TBD", "b": "TBD", "venue": "체육관", "priority": false, "label": "2학년 혼성빅발리볼 결승"}];
+const DEFAULT_SEEDS = {"dodge_g1": [["4반", "5반"], ["6반", "7반"], ["1반", "8반"], ["2반", "3반"]], "dodge_g2": [["6반", "7반"], ["3반", "5반"], ["2반", "8반"], ["1반", "4반"]], "bigvolley_g1": [["3반", "6반"], ["1반", "4반"], ["5반", "8반"], ["2반", "7반"]], "bigvolley_g2": [["6반", "7반"], ["3반", "5반"], ["2반", "4반"], ["1반", "8반"]], "soccer_g1": [["4반", "7반"], ["1반", "6반"], ["3반", "8반"], ["2반", "5반"]], "soccer_g2": [["3반", "8반"], ["5반", "6반"], ["1반", "2반"], ["4반", "7반"]], "basket_g1": [["3반", "5반"], ["6반", "7반"], ["2반", "8반"], ["1반", "4반"]], "basket_g2": [["7반", "8반"], ["1반", "2반"], ["3반", "5반"], ["4반", "6반"]], "cvolley_g1": [["TBD", "TBD"], ["TBD", "TBD"], ["TBD", "TBD"], ["TBD", "TBD"]], "cvolley_g2": [["TBD", "TBD"], ["TBD", "TBD"], ["TBD", "TBD"], ["TBD", "TBD"]]};
+const DEFAULT_ROSTERS = {"1_1_축구": "이하준\n김민규\n최재욱\n정민석\n박진산\n김지호\n유의선\n박제원\n전유찬", "1_1_농구": "유의선\n최재욱\n박제원\n김민규\n이하준\n정민석\n박진산", "1_1_피구": "김래은\n신유빈\n박승아\n김리현\n이혜원\n이수아\n김태은\n하정은\n하서윤\n윤다현\n박서영", "1_1_빅발리볼": "김래은\n신유빈\n김리현\n박승아\n김태은\n이수아", "1_1_혼성빅발리볼": "이하준\n김민규\n최재욱\n정민석\n박진산\n김지호\n유의선\n박제원\n전유찬\n김지호\n김래은\n신유빈\n박승아\n김리현", "1_2_축구": "조예준\n박주혁\n홍지민\n정유현\n홍승우\n김성훈\n고기용\n서민찬\n고건호", "1_2_농구": "조예준\n박주혁\n홍지민\n정유현\n홍승우\n고기용\n오정혁", "1_2_피구": "박시후\n조수연\n주시언\n배수민\n박주연\n안혜원\n정서윤\n고영주\n고유림\n최의진", "1_2_빅발리볼": "박시후\n주시언\n박주연\n장소희\n최의진\n조수연\n정하윤", "1_2_혼성빅발리볼": "조예준\n박주혁\n홍지민\n정유현\n고기용\n홍승우\n고건호\n김성훈\n김선우\n이지훈\n주시언\n정서현\n정하윤\n고영주\n고유림", "1_3_축구": "박준형\n고은성\n양도현\n임근홍\n정우영\n이장현\n강영욱\n김진우\n나현우", "1_3_농구": "양도현\n김진우\n박준형\n정우영\n고은성\n김동현\n임근홍", "1_3_피구": "김여원\n안소영\n김현아\n정지우\n김현서\n김예린\n박하린\n임하윤\n심정서\n김예원\n조여경", "1_3_빅발리볼": "김여원\n안소영\n정지우\n임하윤\n김현아\n김예린\n박하린\n심정서", "1_3_혼성빅발리볼": "김진우\n강영욱\n고은성\n박준형\n양도현\n이장현\n최시원\n정우영\n전웅찬\n임근홍\n김여원\n임하윤\n안소영\n김현아", "1_4_축구": "김탁린\n박주형\n이해승\n전준휘\n정규영\n조재한\n허준석\n박민준", "1_4_농구": "박주형\n이해승\n정규영\n조재한\n허준석\n김탁린\n박민준", "1_4_피구": "기서현\n김도영\n박가람\n박재은\n안소정\n윤지유\n이주희\n장나은\n최수현", "1_4_빅발리볼": "김나현\n김연지\n김하정\n박윤서\n윤서현\n이다원", "1_4_혼성빅발리볼": "김탁린\n박가람\n박주형\n안소정\n윤서현\n윤지유\n이유준\n이해승\n이호현\n임온유\n전준휘\n정규영\n조재한\n허준석", "1_5_축구": "조진명\n임재형\n양태경\n이정우\n주시언\n강성윤\n김주안\n전승호\n김우진", "1_5_농구": "양태경\n주시언\n전승호\n이정우\n강성윤\n조진명\n임재형", "1_5_피구": "한지유\n권민서\n정선유\n오수현\n장아인\n현지윤\n이서진\n심소요\n조은서\n배서윤\n한승하", "1_5_빅발리볼": "한지유\n권민서\n정선유\n오수현\n장아인\n한승하\n조은서\n배서윤", "1_5_혼성빅발리볼": "주시언\n양태경\n임재형\n심인우\n마현하\n이정우\n조진명\n전승호\n강성윤\n김우진\n한지유\n정선유\n권민서\n오수현", "1_6_축구": "김민건\n백지원\n박신형\n이찬영\n장윤성\n김시우\n정시현\n박은우\n유민상", "1_6_농구": "이찬영\n박신형\n장윤성\n한연우\n박민준\n김민건\n백지원", "1_6_피구": "지수빈\n김예은\n김소이\n윤성아\n강하은\n서민영\n김사랑\n김소휘\n전혜원\n황세린\n김리원", "1_6_빅발리볼": "지수빈\n김예은\n김소이\n윤성아\n고현경\n강하은\n서민영\n김사랑", "1_6_혼성빅발리볼": "김민건\n장윤성\n백지원\n이찬영\n박신형\n김시우\n한연우\n정시현\n임태현\n박민준\n김예은\n김소이\n서민영\n김소휘", "1_7_축구": "문정호\n모승빈\n이시우\n김시후\n김진영\n김광휘\n정태현\n평성훈\n한승완", "1_7_농구": "문정호\n김시후\n김하빈\n김선규\n평성훈\n모승빈\n이시우", "1_7_피구": "김예린\n박수빈\n서원\n김소윤\n김지민\n최수아\n이혜정\n조은정\n김서원\n장유빈", "1_7_빅발리볼": "김예린\n최수아\n조은정\n김지민\n김소윤\n서원", "1_7_혼성빅발리볼": "민재연\n문정호\n모승빈\n이시우\n김시후\n한지혁\n김진영\n김하빈\n평성훈\n정태현\n조은정\n이혜정\n김예린\n최수아", "1_8_축구": "김하건\n박창하\n고태후\n황재훈\n차유승\n신지웅\n김범찬\n김준수\n이준서", "1_8_농구": "박창하\n김준수\n최현준\n김범찬\n차유승\n김현성\n하규민", "1_8_피구": "손예영\n전지예\n김지효\n진가영\n이서연\n김은비\n안아연\n박지효\n손현서\n김준희\n최정원", "1_8_빅발리볼": "손예영\n전지예\n김지효\n진가영\n이서연\n김은비\n박지효\n안아연", "1_8_혼성빅발리볼": "황재훈\n박창하\n신지웅\n김준수\n김범찬\n고태후\n김하건\n최현준\n이준서\n손예영\n김은비\n안아연\n진가영\n하규민", "2_1_축구": "고준서\n김우형\n김정우\n김하늘\n박건하\n박성민\n안지민\n김경민\n정시원", "2_1_농구": "고준서\n김우형\n김하늘\n이현주\n정시원\n김경민\n김정우", "2_1_피구": "김서겸\n문사랑\n안민아\n엄채원\n유승연\n윤가영\n정소율\n정하나\n최민화\n박가현\n이정현", "2_1_빅발리볼": "김서겸\n문사랑\n안민아\n유승연\n정소율\n정하나\n박가현\n최민화", "2_1_혼성빅발리볼": "고준서\n김경민\n김두현\n김우형\n김정우\n김찬결\n김하늘\n박성민\n이현주\n정시원\n문사랑\n안민아\n유승연\n정소율", "2_2_축구": "김민주\n박상혁\n박성지\n박시후\n윤예썽\n조부겸\n홍태인\n김도형", "2_2_농구": "박상혁\n박시후\n윤예썽\n전서준\n조부겸\n이수민\n홍태인", "2_2_피구": "강혜연\n김승유\n김은영\n박서연\n이세아\n장다연\n정해린\n최경아\n최수인", "2_2_빅발리볼": "김승유\n정해린\n최수인\n김은영\n장다연\n강혜연\n최경아\n이세아", "2_2_혼성빅발리볼": "김민주\n곽태준\n김은영\n박상혁\n윤예성\n이규담\n최수인\n박시후\n강혜연\n이세아\n박성지\n홍태인\n이수민\n조부겸", "2_3_축구": "김범석\n송건우\n노윤호\n정도윤\n김성빈\n김정환\n장승준\n김도연\n강민", "2_3_농구": "김범석\n송건우\n노윤호\n장승준\n한준영\n정도윤\n김정환", "2_3_피구": "김경민\n김나형\n김수비\n김연우\n박예서\n심정운\n이하은\n정예서\n차화은\n손담비", "2_3_빅발리볼": "김수비\n박예서\n이하은\n김연우\n김경민\n김나형\n차화은\n정예서", "2_3_혼성빅발리볼": "강민\n김도연\n김정환\n김성빈\n정도윤\n장승준\n노윤호\n송건우\n김범석\n김유현\n김수비\n정예서\n김연우\n이하은", "2_4_축구": "손시현\n염용현\n이도현\n박유현\n김재성\n김시원\n이윤건\n박이준\n김승연", "2_4_농구": "이윤건\n이도현\n염용현\n김시원\n손시현\n정우균\n박유현", "2_4_피구": "박보민\n박가윤\n조정인\n정지원\n신수아\n이수연\n김은성\n박주함\n이채원\n김송현\n정민교", "2_4_빅발리볼": "정민교\n신수아\n이수연\n김송현\n김은성\n정지원\n박가윤\n박주함", "2_4_혼성빅발리볼": "이도현\n손시현\n염용현\n박유현\n정우균\n김시원\n정현우\n이세현\n정태연\n이윤건\n김송현\n조정인\n이수연\n김은성", "2_5_축구": "박준현\n김두현\n김장후\n강상욱\n이하준\n박의현\n이찬이\n김태현\n김주안", "2_5_농구": "박의현\n박준현\n이찬이\n박승현\n김두현\n김태현\n이하준", "2_5_피구": "박지우\n이예원\n이서연\n조옐니\n백서윤\n김가인\n이지후\n이서하\n조글\n조다영\n박지빈", "2_5_빅발리볼": "박지우\n이서연\n조글\n백서윤\n이지후\n장세정\n이예원", "2_5_혼성빅발리볼": "박준현\n이하준\n김태현\n박의현\n이찬이\n강상욱\n조태욱\n이세진\n김장후\n김두현\n이서연\n조글\n이지후\n백서윤", "2_6_축구": "강건오\n배창균\n전주열\n한종혁\n조우현\n박준성\n최은호\n김서준\n배정우", "2_6_농구": "한종혁\n이승주\n박준성\n배창균\n조우현\n전주열\n김서준", "2_6_피구": "오다영\n신여울\n황서연\n허수현\n김강희\n김다린\n변수지\n정서현\n김지희\n윤아연\n정혜윤", "2_6_빅발리볼": "박시은\n허수현\n강나래\n박지현\n황서연\n오다영\n신아경\n임지유", "2_6_혼성빅발리볼": "강건오\n배창균\n한종혁\n전주열\n장승원\n김서준\n이승주\n조우현\n최은호\n박준성\n김다린\n강나래\n허수현\n박시은", "2_7_축구": "김찬\n조석진\n조민규\n박겸\n김윤우\n김동훈\n이민준\n이정우\n정재진", "2_7_농구": "김윤우\n조석진\n김찬\n박겸\n조민규\n정재진\n최세혁", "2_7_피구": "배가희\n이경은\n고아라\n나예린\n박예은\n정보경\n송은교\n강수지\n조혜원\n박지윤\n공서영", "2_7_빅발리볼": "배가희\n고아라\n이경은\n고현서\n전하율\n박지윤\n김보영\n김다원", "2_7_혼성빅발리볼": "배가희\n이경은\n고아라\n박지윤\n김찬\n조석진\n조민규\n박겸\n김윤우\n김재서\n최세혁\n이민준\n이정우\n박서진", "2_8_축구": "김민혁\n김도영\n임건우\n조원빈\n김은찬\n지승혁\n김지훈\n문건호\n김효식", "2_8_농구": "김민혁\n김도영\n안형주\n지승혁\n조원빈\n임건우\n김은찬", "2_8_피구": "김단아\n박지후\n오태령\n오지우\n강시윤\n김가온\n오채원\n홍효선\n구도현\n신희주\n김하율", "2_8_빅발리볼": "김단아\n박지후\n오태령\n구도현\n김효린\n정민경\n김하율\n신희주", "2_8_혼성빅발리볼": "김민혁\n김도영\n안형주\n김효식\n문건호\n김지훈\n임건우\n조원빈\n김은찬\n지승혁\n김단아\n박지후\n오태령\n김효린"};
+const REFEREE_PW = "namak0901";
+const ADMIN_PW = "yesol0202";
+const SPORTS = [
+  {key:"dodge",name:"피구"},{key:"bigvolley",name:"빅발리볼"},
+  {key:"soccer",name:"축구"},{key:"basket",name:"농구"},
+  {key:"cvolley",name:"혼성빅발리볼"}
+];
+const SPORT_KO2KEY = {"피구":"dodge","빅발리볼":"bigvolley","축구":"soccer","농구":"basket","혼성빅발리볼":"cvolley"};
+
+// ===== STATE =====
+let currentRole = null;
+let pendingLoginRole = null, pendingTab = null;
+let currentBracketSport = "dodge";
+let currentBracketGrade = 1;
+
+// ===== STORAGE =====
+const loadResults = () => JSON.parse(localStorage.getItem("namak_results")||"{}");
+const saveResults = r => localStorage.setItem("namak_results", JSON.stringify(r));
+const loadRosters = () => Object.assign({}, DEFAULT_ROSTERS, JSON.parse(localStorage.getItem("namak_rosters")||"{}"));
+const saveRostersLocal = r => localStorage.setItem("namak_rosters", JSON.stringify(r));
+const loadSchedule = () => {
+  const s = localStorage.getItem("namak_schedule");
+  return s ? JSON.parse(s) : DEFAULT_SCHEDULE.slice();
+};
+const saveSchedule = s => localStorage.setItem("namak_schedule", JSON.stringify(s));
+const loadSeeds = () => {
+  const s = localStorage.getItem("namak_seeds");
+  return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_SEEDS));
+};
+const saveSeedsLocal = s => localStorage.setItem("namak_seeds", JSON.stringify(s));
+const loadNotice = () => JSON.parse(localStorage.getItem("namak_notice")||'{"text":"","urgent":false}');
+const saveNotice = n => localStorage.setItem("namak_notice", JSON.stringify(n));
+const matchKey = m => `${m.date}_${m.time}_${m.sport}_${m.grade}_${m.a}_${m.b}`;
+
+// ===== UTILS =====
+function fmtDate(d){
+  const D=new Date(d+"T00:00:00");
+  const days=["일","월","화","수","목","금","토"];
+  return `${D.getMonth()+1}월 ${D.getDate()}일 <span class="day">${days[D.getDay()]}요일</span>`;
+}
+function classNum(s){ const m=String(s).match(/(\d+)/); return m?parseInt(m[1]):999; }
+// 반 번호 오름차순 정렬해서 [a,b] 리턴
+function orderTeams(a,b){
+  if(a==="TBD"||b==="TBD") return [a,b];
+  return classNum(a) <= classNum(b) ? [a,b] : [b,a];
+}
+function getResult(m){ return loadResults()[matchKey(m)]||null; }
+
+// ===== TABS =====
+function switchTab(name){
+  document.querySelectorAll(".pane").forEach(p=>p.style.display="none");
+  const el=document.getElementById("pane-"+name);
+  if(el) el.style.display="block";
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.tab===name));
+  if(name==="today") renderToday();
+  if(name==="bracket") renderBracket();
+  if(name==="allsched") renderAllSched();
+  if(name==="result") renderResults();
+  if(name==="meal") renderMeal();
+  if(name==="roster") renderRoster();
+  if(name==="edit") renderEditList();
+}
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    if(tab.classList.contains("locked")) return;
+    switchTab(tab.dataset.tab);
+  });
+});
+
+// ===== LOGIN =====
+function canAccess(tab){
+  if(currentRole==="admin") return true;
+  const el=document.querySelector(`.tab[data-tab="${tab}"]`);
+  if(!el || !el.dataset.role) return true;
+  return currentRole===el.dataset.role;
+}
+function requireLogin(role, tab){
+  // 관리자는 모든 잠긴 탭에 접근 가능
+  if(currentRole==="admin"){ switchTab(tab); return; }
+  if(currentRole===role){ switchTab(tab); return; }
+  pendingLoginRole=role; pendingTab=tab;
+  document.getElementById("loginOverlay").classList.add("show");
+  document.querySelectorAll(".login-role").forEach(b=>b.classList.toggle("active", b.dataset.role===role));
+  document.getElementById("loginPw").value="";
+  document.getElementById("loginErr").textContent="";
+  setTimeout(()=>document.getElementById("loginPw").focus(),100);
+}
+function pickRole(r){
+  pendingLoginRole=r;
+  document.querySelectorAll(".login-role").forEach(b=>b.classList.toggle("active", b.dataset.role===r));
+}
+function closeLogin(){ document.getElementById("loginOverlay").classList.remove("show"); pendingLoginRole=null; pendingTab=null; }
+function tryLogin(){
+  const pw=document.getElementById("loginPw").value;
+  const need=pendingLoginRole==="referee"?REFEREE_PW:ADMIN_PW;
+  if(pw===need){
+    currentRole=pendingLoginRole;
+    updateAuthBar(); unlockTabs();
+    const t=pendingTab; closeLogin();
+    if(t) switchTab(t);
+  }else{
+    document.getElementById("loginErr").textContent="비밀번호가 올바르지 않습니다.";
+  }
+}
+document.getElementById("loginPw").addEventListener("keydown",e=>{if(e.key==="Enter") tryLogin();});
+function updateAuthBar(){
+  const bar=document.getElementById("authBar");
+  if(currentRole){
+    bar.style.display="flex";
+    document.getElementById("authRole").textContent=(currentRole==="referee"?"심판":"관리자")+" 로그인 중";
+  }else bar.style.display="none";
+  document.getElementById("noticeEditBtn").style.display = currentRole==="admin" ? "inline-block" : "none";
+}
+function unlockTabs(){
+  document.querySelectorAll(".tab").forEach(t=>{
+    const need=t.dataset.role;
+    if(!need) return;
+    // 관리자는 모든 것을 잠금 해제
+    if(currentRole==="admin"||currentRole===need){ t.classList.remove("locked"); }
+    else { t.classList.add("locked"); }
+  });
+}
+function logout(){ currentRole=null; updateAuthBar(); unlockTabs(); switchTab("today"); }
+
+// ===== TODAY =====
+function initDatePickers(){
+  const today = new Date().toISOString().slice(0,10);
+  ["datePicker","datePickerResult","datePickerMeal","datePickerEdit"].forEach(id=>{
+    const el=document.getElementById(id);
+    el.value=today; el.min="2026-08-31"; el.max="2026-10-31";
+  });
+  const nd = document.getElementById("newDate"); if(nd) nd.value=today;
+  document.getElementById("datePicker").addEventListener("change",renderToday);
+  document.getElementById("datePickerResult").addEventListener("change",renderResults);
+  document.getElementById("datePickerMeal").addEventListener("change",renderMeal);
+  document.getElementById("datePickerEdit").addEventListener("change",renderEditList);
+}
+function matchCardHTML(m){
+  const [ta,tb] = orderTeams(m.a, m.b);
+  const r=getResult(m);
+  let aCls="team-name", bCls="team-name", scoreBadge="";
+  if(ta==="TBD") aCls+=" tbd";
+  if(tb==="TBD") bCls+=" tbd";
+  if(r && ta!=="TBD" && tb!=="TBD"){
+    // r.sa/sb는 원본 m.a/m.b 순서. 정렬된 ta==m.a 이면 그대로, 아니면 스왑
+    const swap = (ta !== m.a);
+    const sA = swap ? r.sb : r.sa;
+    const sB = swap ? r.sa : r.sb;
+    if(sA>sB){aCls+=" winner";bCls+=" loser";}
+    else if(sB>sA){bCls+=" winner";aCls+=" loser";}
+    scoreBadge=`<div class="match-score">${sA} : ${sB}</div>`;
+  }
+  const meta=[`<span class="match-sport">${m.sport}</span>`,`<span class="match-grade">${m.grade}학년</span>`];
+  if(m.priority) meta.push(`<span class="match-priority">우선급식</span>`);
+  const label = m.label ? `<div class="match-label">${m.label}</div>` : "";
+  return `<div class="match-card">
+    <div class="match-time"><div class="match-time-big">${m.time}</div></div>
+    <div class="match-body">
+      <div class="match-meta">${meta.join("")}</div>
+      <div class="match-teams">
+        <span class="${aCls}">${ta}</span>
+        <span class="vs">VS</span>
+        <span class="${bCls}">${tb}</span>
+        ${scoreBadge}
+      </div>
+      ${label}
+    </div>
+  </div>`;
+}
+function renderToday(){
+  const d=document.getElementById("datePicker").value;
+  document.getElementById("todayDate").innerHTML=fmtDate(d);
+  const matches=loadSchedule().filter(m=>m.date===d).sort((a,b)=>a.time.localeCompare(b.time));
+  document.getElementById("todayCount").textContent=`경기 ${matches.length}개`;
+  const list=document.getElementById("matchList");
+  if(matches.length===0){
+    list.innerHTML=`<div class="empty">이 날은 예정된 경기가 없습니다.</div>`;
+    renderNotice(); return;
+  }
+  const gym = matches.filter(m=>m.venue==="체육관");
+  const field = matches.filter(m=>m.venue==="운동장");
+  let html="";
+  if(gym.length){ html += `<div class="venue-header">체육관</div>` + gym.map(matchCardHTML).join(""); }
+  if(field.length){ html += `<div class="venue-header">운동장</div>` + field.map(matchCardHTML).join(""); }
+  list.innerHTML=html;
+  renderNotice();
+}
+function renderNotice(){
+  const n=loadNotice();
+  const card=document.getElementById("noticeCard");
+  const body=document.getElementById("noticeBody");
+  if(!n.text){
+    card.classList.remove("urgent");
+    body.innerHTML='<span class="notice-empty">등록된 공지가 없습니다.</span>';
+  }else{
+    if(n.urgent){ card.classList.add("urgent"); body.innerHTML=`<span class="notice-dot"></span>${n.text}`; }
+    else{ card.classList.remove("urgent"); body.textContent=n.text; }
+  }
+}
+function openNoticeEdit(){
+  const n=loadNotice();
+  const text=prompt("공지 내용을 입력하세요 (빈 값이면 삭제)", n.text);
+  if(text===null) return;
+  if(text.trim()===""){ saveNotice({text:"",urgent:false}); renderNotice(); return; }
+  const urgent = confirm("긴급 공지로 표시하시겠습니까? (빨간 배경)");
+  saveNotice({text:text.trim(), urgent});
+  renderNotice();
+}
+
+// ===== BRACKET =====
+function renderBracketTabs(){
+  const tabs=document.getElementById("bracketSportTabs");
+  tabs.innerHTML=SPORTS.map(s=>`<button class="bracket-sport-tab ${s.key===currentBracketSport?'active':''}" data-key="${s.key}">${s.name}</button>`).join("");
+  tabs.querySelectorAll(".bracket-sport-tab").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      currentBracketSport=btn.dataset.key;
+      renderBracketTabs(); renderBracket();
+    });
+  });
+  document.querySelectorAll(".grade-btn").forEach(btn=>{
+    btn.onclick=()=>{
+      currentBracketGrade=parseInt(btn.dataset.grade);
+      document.querySelectorAll(".grade-btn").forEach(b=>b.classList.toggle("active",b===btn));
+      renderBracket();
+    };
+  });
+}
+function computeBracket(sportKey, grade){
+  const seeds=loadSeeds();
+  const seedList=(seeds[`${sportKey}_g${grade}`]||[]).map(pair=>{
+    const [a,b]=orderTeams(pair[0],pair[1]);
+    return [a,b];
+  });
+  const results=loadResults();
+  const sportName={dodge:"피구",bigvolley:"빅발리볼",soccer:"축구",basket:"농구",cvolley:"혼성빅발리볼"}[sportKey];
+  const findResult = (a,b) => {
+    for(const [k,v] of Object.entries(results)){
+      const parts=k.split("_");
+      if(parts.length<6) continue;
+      const s=parts[2], g=parseInt(parts[3]), pa=parts[4], pb=parts[5];
+      if(s===sportName && g===grade && ((pa===a&&pb===b)||(pa===b&&pb===a))){
+        let winner=null, score=null;
+        if(v.sa>v.sb) winner=pa; else if(v.sb>v.sa) winner=pb;
+        score = pa===a?[v.sa,v.sb]:[v.sb,v.sa];
+        return {winner, score};
+      }
+    }
+    return null;
+  };
+  const qf=seedList.map(pair=>{
+    if(pair[0]==="TBD"||pair[1]==="TBD") return {a:pair[0],b:pair[1],winner:null,score:null};
+    const r=findResult(pair[0],pair[1]);
+    return {a:pair[0],b:pair[1],winner:r?r.winner:null,score:r?r.score:null};
+  });
+  const sf=[];
+  for(let i=0;i<2;i++){
+    const w1=qf[i*2].winner, w2=qf[i*2+1].winner;
+    let winner=null, score=null;
+    if(w1&&w2){ const r=findResult(w1,w2); if(r){winner=r.winner;score=r.score;} }
+    sf.push({a:w1,b:w2,winner,score});
+  }
+  const w1=sf[0].winner, w2=sf[1].winner;
+  let fWinner=null, fScore=null;
+  if(w1&&w2){ const r=findResult(w1,w2); if(r){fWinner=r.winner;fScore=r.score;} }
+  return {qf, sf, f:{a:w1,b:w2,winner:fWinner,score:fScore}, champion:fWinner};
+}
+function drawBox(x,y,w,h,teamName,isWinner,score){
+  const label = teamName || "TBD";
+  const cls = teamName && teamName!=="TBD" ? (isWinner===true?"won":(isWinner===false?"lost":"")) : "tbd";
+  const boxCls = teamName && teamName!=="TBD" ? (isWinner===true?"br-box won":(isWinner===false?"br-box lost":"br-box")) : "br-box";
+  const scoreText = (score!==null && score!==undefined) ? `<text x="${x+w-14}" y="${y+h/2}" class="br-score ${cls}">${score}</text>` : "";
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" class="${boxCls}"/>
+    <text x="${x+w/2-8}" y="${y+h/2}" class="br-text ${cls}">${label}</text>${scoreText}`;
+}
+function renderBracket(){
+  renderBracketTabs();
+  const data=computeBracket(currentBracketSport, currentBracketGrade);
+  const sportName=SPORTS.find(s=>s.key===currentBracketSport).name;
+  const W=520, H=440, boxW=100, boxH=30;
+  const col1=10, col2=170, col3=330, col4=410;
+  const qfYs=[[30,65],[110,145],[220,255],[300,335]];
+  const sfYs=[
+    [(qfYs[0][0]+qfYs[1][1])/2 - boxH/2, (qfYs[0][0]+qfYs[1][1])/2 + boxH/2 + 5],
+    [(qfYs[2][0]+qfYs[3][1])/2 - boxH/2, (qfYs[2][0]+qfYs[3][1])/2 + boxH/2 + 5]
+  ];
+  const fYs=[((sfYs[0][0]+sfYs[1][1])/2)-boxH-3, ((sfYs[0][0]+sfYs[1][1])/2)+3];
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg += `<text x="${col1+boxW/2}" y="15" class="br-round-label">8강</text>`;
+  svg += `<text x="${col2+boxW/2}" y="15" class="br-round-label">4강</text>`;
+  svg += `<text x="${col3+boxW/2}" y="15" class="br-round-label">결승</text>`;
+  svg += `<text x="${col4+boxW/2}" y="15" class="br-round-label">우승</text>`;
+  data.qf.forEach((m,i)=>{
+    const [ya,yb]=qfYs[i];
+    svg += drawBox(col1,ya,boxW,boxH,m.a,m.winner?m.winner===m.a:null,m.score?m.score[0]:null);
+    svg += drawBox(col1,yb,boxW,boxH,m.b,m.winner?m.winner===m.b:null,m.score?m.score[1]:null);
+    const sfIdx=Math.floor(i/2);
+    const isTop=(i%2===0);
+    const sfY = isTop ? sfYs[sfIdx][0]+boxH/2 : sfYs[sfIdx][1]+boxH/2;
+    const midX = col1+boxW+30;
+    const qfMidY = (ya+boxH/2 + yb+boxH/2)/2;
+    svg += `<path d="M ${col1+boxW} ${ya+boxH/2} L ${midX} ${ya+boxH/2} L ${midX} ${qfMidY}" class="br-line"/>`;
+    svg += `<path d="M ${col1+boxW} ${yb+boxH/2} L ${midX} ${yb+boxH/2} L ${midX} ${qfMidY}" class="br-line"/>`;
+    svg += `<path d="M ${midX} ${qfMidY} L ${midX} ${sfY} L ${col2} ${sfY}" class="br-line"/>`;
+  });
+  data.sf.forEach((m,i)=>{
+    const [ya,yb]=sfYs[i];
+    svg += drawBox(col2,ya,boxW,boxH,m.a,m.winner?m.winner===m.a:null,m.score?m.score[0]:null);
+    svg += drawBox(col2,yb,boxW,boxH,m.b,m.winner?m.winner===m.b:null,m.score?m.score[1]:null);
+    const isTop=(i===0);
+    const fY = isTop ? fYs[0]+boxH/2 : fYs[1]+boxH/2;
+    const midX = col2+boxW+30;
+    const sfMidY = (ya+boxH/2 + yb+boxH/2)/2;
+    svg += `<path d="M ${col2+boxW} ${ya+boxH/2} L ${midX} ${ya+boxH/2} L ${midX} ${sfMidY}" class="br-line"/>`;
+    svg += `<path d="M ${col2+boxW} ${yb+boxH/2} L ${midX} ${yb+boxH/2} L ${midX} ${sfMidY}" class="br-line"/>`;
+    svg += `<path d="M ${midX} ${sfMidY} L ${midX} ${fY} L ${col3} ${fY}" class="br-line"/>`;
+  });
+  {
+    const m=data.f;
+    svg += drawBox(col3,fYs[0],boxW,boxH,m.a,m.winner?m.winner===m.a:null,m.score?m.score[0]:null);
+    svg += drawBox(col3,fYs[1],boxW,boxH,m.b,m.winner?m.winner===m.b:null,m.score?m.score[1]:null);
+    const midX = col3+boxW+20;
+    const champY = (fYs[0]+fYs[1]+boxH)/2;
+    svg += `<path d="M ${col3+boxW} ${fYs[0]+boxH/2} L ${midX} ${fYs[0]+boxH/2} L ${midX} ${champY}" class="br-line"/>`;
+    svg += `<path d="M ${col3+boxW} ${fYs[1]+boxH/2} L ${midX} ${fYs[1]+boxH/2} L ${midX} ${champY}" class="br-line"/>`;
+    svg += `<path d="M ${midX} ${champY} L ${col4} ${champY}" class="br-line"/>`;
+    const champ = data.champion;
+    svg += `<rect x="${col4}" y="${champY-boxH/2}" width="${boxW}" height="${boxH}" rx="6" style="fill:#fbbf24;stroke:#f59e0b;stroke-width:1.5"/>`;
+    svg += `<text x="${col4+boxW/2}" y="${champY}" class="br-text" style="fill:${champ?'#78350f':'#bbb'};font-weight:900">${champ||'TBD'}</text>`;
+  }
+  svg += `</svg>`;
+  document.getElementById("bracketBox").innerHTML = `
+    <div class="bracket-wrap">
+      <div class="bracket-title">${currentBracketGrade}학년 ${sportName} 대진표</div>
+      <div class="bracket-champion">
+        <div class="bracket-champion-label">CHAMPION</div>
+        <div class="bracket-champion-name ${data.champion?'':'bracket-champion-empty'}">${data.champion? `${currentBracketGrade}학년 ${data.champion}` : '경기 진행 중'}</div>
+      </div>
+      <div class="bracket">${svg}</div>
+    </div>`;
+  renderSeedEditor();
+}
+function renderSeedEditor(){
+  const box=document.getElementById("seedEditor");
+  if(currentRole!=="admin"){ box.style.display="none"; box.innerHTML=""; return; }
+  box.style.display="block";
+  const seeds=loadSeeds();
+  const key=`${currentBracketSport}_g${currentBracketGrade}`;
+  const list=seeds[key]||[["TBD","TBD"],["TBD","TBD"],["TBD","TBD"],["TBD","TBD"]];
+  const options = ['<option value="TBD">TBD</option>'].concat([1,2,3,4,5,6,7,8].map(n=>`<option value="${n}반">${n}반</option>`)).join("");
+  let html=`<div class="seed-edit-panel"><h4>대진표 시드 편집 (관리자)</h4>`;
+  list.forEach((pair,i)=>{
+    html += `<div class="seed-row">
+      <span class="seed-row-label">${i+1}경기</span>
+      <select data-seed="${i}" data-side="0">${options}</select>
+      <span>vs</span>
+      <select data-seed="${i}" data-side="1">${options}</select>
+    </div>`;
+  });
+  html += `<button class="seed-save" onclick="saveSeedsAction()">시드 저장</button></div>`;
+  box.innerHTML=html;
+  // set values
+  list.forEach((pair,i)=>{
+    box.querySelector(`select[data-seed="${i}"][data-side="0"]`).value = pair[0];
+    box.querySelector(`select[data-seed="${i}"][data-side="1"]`).value = pair[1];
+  });
+}
+function saveSeedsAction(){
+  const seeds=loadSeeds();
+  const key=`${currentBracketSport}_g${currentBracketGrade}`;
+  const newList=[];
+  for(let i=0;i<4;i++){
+    const a=document.querySelector(`#seedEditor select[data-seed="${i}"][data-side="0"]`).value;
+    const b=document.querySelector(`#seedEditor select[data-seed="${i}"][data-side="1"]`).value;
+    newList.push([a,b]);
+  }
+  seeds[key]=newList;
+  saveSeedsLocal(seeds);
+  alert("시드가 저장되었습니다.");
+  renderBracket();
+}
+
+// ===== ALL SCHEDULE (반별) =====
+function renderAllSched(){
+  const g=document.getElementById("allSchedGrade").value;
+  const c=document.getElementById("allSchedClass").value+"반";
+  const list=loadSchedule().filter(m=>m.grade==parseInt(g) && (m.a===c||m.b===c))
+    .sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const box=document.getElementById("allSchedList");
+  if(!list.length){ box.innerHTML=`<div class="empty">해당 반의 경기가 없습니다.</div>`; return; }
+  const days=["일","월","화","수","목","금","토"];
+  box.innerHTML = list.map(m=>{
+    const D=new Date(m.date+"T00:00:00");
+    const [ta,tb]=orderTeams(m.a,m.b);
+    const r=getResult(m);
+    let resultHTML="";
+    if(r && m.a!=="TBD"){
+      const my = m.a===c ? "a" : "b";
+      const myScore = my==="a"?r.sa:r.sb;
+      const oppScore = my==="a"?r.sb:r.sa;
+      const won = myScore>oppScore;
+      resultHTML = `<span class="allsched-result ${won?'win':'lose'}">${won?'승':'패'} ${myScore}:${oppScore}</span>`;
+    }
+    return `<div class="allsched-item">
+      <div class="allsched-date">${D.getMonth()+1}/${D.getDate()}<span class="weekday">${days[D.getDay()]}</span></div>
+      <div class="allsched-body">
+        <div class="allsched-meta">${m.time} · ${m.sport} · ${m.venue}</div>
+        <div class="allsched-teams">${ta} <span style="color:#999;font-size:11px">VS</span> ${tb}${m.label?` · ${m.label}`:""}</div>
+      </div>
+      ${resultHTML}
+    </div>`;
+  }).join("");
+}
+["allSchedGrade","allSchedClass"].forEach(id=>document.getElementById(id).addEventListener("change",renderAllSched));
+
+// ===== RESULT INPUT =====
+function renderResults(){
+  const d=document.getElementById("datePickerResult").value;
+  const matches=loadSchedule().filter(m=>m.date===d).sort((a,b)=>a.time.localeCompare(b.time));
+  const list=document.getElementById("resultList");
+  if(matches.length===0){ list.innerHTML=`<div class="empty">이 날은 경기가 없습니다.</div>`; return; }
+  list.innerHTML=matches.map((m,idx)=>{
+    const key=matchKey(m);
+    const r=getResult(m)||{sa:"",sb:""};
+    const [ta,tb]=orderTeams(m.a,m.b);
+    const swap = (ta!==m.a);
+    const sA = swap ? r.sb : r.sa;
+    const sB = swap ? r.sa : r.sb;
+    // TBD 상황이면 팀명 직접 입력 필드도 제공 (심판/관리자 임시 배정용)
+    const isTbd = (m.a==="TBD"||m.b==="TBD");
+    const nameA = isTbd ? `<input type="text" class="result-team-input" data-idx="${idx}" data-tbd="a" value="" placeholder="A팀 (예: 3반)">` : "";
+    const nameB = isTbd ? `<input type="text" class="result-team-input" data-idx="${idx}" data-tbd="b" value="" placeholder="B팀 (예: 5반)">` : "";
+    return `<div class="result-card" data-idx="${idx}">
+      <div class="result-header">
+        <div class="result-title">${m.grade}학년 ${m.sport}${m.label?` · ${m.label}`:""}</div>
+        <div class="result-time">${m.time}</div>
+      </div>
+      <div class="result-scoring">
+        <div class="result-team">
+          <div class="result-team-name">${ta}</div>
+          <input type="number" min="0" class="result-score-input" data-side="a" value="${sA}">
+          ${nameA}
+        </div>
+        <div class="result-vs">VS</div>
+        <div class="result-team">
+          <div class="result-team-name">${tb}</div>
+          <input type="number" min="0" class="result-score-input" data-side="b" value="${sB}">
+          ${nameB}
+        </div>
+      </div>
+      <button class="result-save" onclick="saveResult(${idx}, this)">결과 저장</button>
+      <button class="result-clear" onclick="clearResult(${idx})">결과 삭제</button>
+    </div>`;
+  }).join("");
+}
+function saveResult(idx, btn){
+  const d=document.getElementById("datePickerResult").value;
+  const matches=loadSchedule().filter(m=>m.date===d).sort((a,b)=>a.time.localeCompare(b.time));
+  const m=matches[idx];
+  const card=btn.closest(".result-card");
+  const sa=card.querySelector('input.result-score-input[data-side="a"]').value;
+  const sb=card.querySelector('input.result-score-input[data-side="b"]').value;
+  if(sa===""||sb===""){ alert("점수를 모두 입력하세요"); return; }
+  // TBD면 이름 입력 사용
+  let aName=m.a, bName=m.b;
+  const inA=card.querySelector('input.result-team-input[data-tbd="a"]');
+  const inB=card.querySelector('input.result-team-input[data-tbd="b"]');
+  if(inA && inA.value.trim()) aName=inA.value.trim();
+  if(inB && inB.value.trim()) bName=inB.value.trim();
+  // ordered ta/tb: 화면상 왼쪽=ta, 오른쪽=tb
+  const [ta,tb]=orderTeams(m.a,m.b);
+  // 저장할 때는 원본 m.a/m.b 순서로 저장 (matchKey와 일치)
+  const swap = (ta!==m.a);
+  const finalSA = swap ? parseInt(sb) : parseInt(sa);
+  const finalSB = swap ? parseInt(sa) : parseInt(sb);
+  const results=loadResults();
+  // TBD 경기 처리: 원본 키는 TBD_TBD 포함되므로, 팀명이 확정되면 스케줄도 업데이트
+  if(m.a==="TBD"||m.b==="TBD"){
+    if(aName==="TBD"||bName==="TBD"){ alert("팀 이름을 입력하세요"); return; }
+    // 스케줄 업데이트
+    const sched=loadSchedule();
+    const origIdx = sched.findIndex(x=>x.date===m.date && x.time===m.time && x.sport===m.sport && x.grade===m.grade && x.a===m.a && x.b===m.b);
+    if(origIdx>=0){
+      sched[origIdx].a = swap?bName:aName;
+      sched[origIdx].b = swap?aName:bName;
+      saveSchedule(sched);
+    }
+    m.a = swap?bName:aName; m.b = swap?aName:bName;
+  }
+  results[matchKey(m)]={sa:finalSA, sb:finalSB, ts:Date.now()};
+  saveResults(results);
+  btn.textContent="저장 완료 ✓"; btn.classList.add("saved");
+  setTimeout(()=>{btn.textContent="결과 저장";btn.classList.remove("saved");renderResults();},1200);
+}
+function clearResult(idx){
+  if(!confirm("결과를 삭제하시겠습니까?")) return;
+  const d=document.getElementById("datePickerResult").value;
+  const matches=loadSchedule().filter(m=>m.date===d).sort((a,b)=>a.time.localeCompare(b.time));
+  const m=matches[idx];
+  const results=loadResults();
+  delete results[matchKey(m)];
+  saveResults(results);
+  renderResults();
+}
+
+// ===== MEAL =====
+function renderMeal(){
+  const d=document.getElementById("datePickerMeal").value;
+  const matches=loadSchedule().filter(m=>m.date===d && m.priority).sort((a,b)=>a.time.localeCompare(b.time));
+  const list=document.getElementById("mealList");
+  if(matches.length===0){ list.innerHTML=`<div class="empty">이 날은 우선급식 대상 경기가 없습니다.<br><span style="font-size:12px">축구 경기와 13:25 농구 경기만 대상</span></div>`; return; }
+  const rosters=loadRosters();
+  list.innerHTML=matches.map(m=>{
+    const [ta,tb]=orderTeams(m.a,m.b);
+    const teams=[ta,tb].map(cls=>{
+      if(cls==="TBD") return `<div class="meal-team"><div class="meal-team-name">${m.grade}학년 (미정)</div><div class="meal-players"><span class="meal-empty-note">팀 미정</span></div></div>`;
+      const key=`${m.grade}_${cls.replace('반','')}_${m.sport}`;
+      const roster=rosters[key]||"";
+      const players=roster.split("\n").map(s=>s.trim()).filter(Boolean);
+      return `<div class="meal-team"><div class="meal-team-name">${m.grade}학년 ${cls}</div>
+        <div class="meal-players">${players.length?players.join(", "):`<span class="meal-empty-note">명단 미입력</span>`}</div></div>`;
+    }).join("");
+    return `<div class="meal-block">
+      <div class="meal-header">
+        <div class="meal-title">${m.grade}학년 ${m.sport} · ${ta} vs ${tb}</div>
+        <span class="meal-time-badge">${m.time}</span>
+      </div>
+      <div class="meal-team-list">${teams}</div>
+    </div>`;
+  }).join("");
+}
+
+// ===== ROSTER =====
+function rosterKey(){
+  const g=document.getElementById("rosterGrade").value;
+  const c=document.getElementById("rosterClass").value;
+  const s=document.getElementById("rosterSport").value;
+  return `${g}_${c}_${s}`;
+}
+function renderRoster(){
+  const g=document.getElementById("rosterGrade").value;
+  const c=document.getElementById("rosterClass").value;
+  const s=document.getElementById("rosterSport").value;
+  document.getElementById("rosterTitle").textContent=`${g}학년 ${c}반`;
+  document.getElementById("rosterSportLabel").textContent=`${s} 종목 선수 명단`;
+  document.getElementById("rosterText").value=loadRosters()[rosterKey()]||"";
+}
+function saveRoster(){
+  const stored = JSON.parse(localStorage.getItem("namak_rosters")||"{}");
+  stored[rosterKey()]=document.getElementById("rosterText").value;
+  saveRostersLocal(stored);
+  const btn=document.getElementById("rosterSaveBtn");
+  btn.textContent="저장 완료 ✓"; btn.classList.add("saved");
+  setTimeout(()=>{btn.textContent="명단 저장";btn.classList.remove("saved");},1500);
+}
+["rosterGrade","rosterClass","rosterSport"].forEach(id=>document.getElementById(id).addEventListener("change",renderRoster));
+
+// ===== SCHEDULE EDIT (admin) =====
+function renderEditList(){
+  const d=document.getElementById("datePickerEdit").value;
+  const sched=loadSchedule();
+  const dayMatches=sched.map((m,i)=>({m,i})).filter(x=>x.m.date===d).sort((a,b)=>a.m.time.localeCompare(b.m.time));
+  const box=document.getElementById("editList");
+  if(!dayMatches.length){ box.innerHTML=`<div class="empty">이 날짜의 경기가 없습니다. 위에서 추가하세요.</div>`; return; }
+  box.innerHTML = dayMatches.map(({m,i})=>{
+    return `<div class="sched-edit-card">
+      <div class="sched-edit-row">
+        <input type="text" data-editidx="${i}" data-field="time" value="${m.time}" maxlength="5">
+        <select data-editidx="${i}" data-field="sport">
+          ${["피구","빅발리볼","축구","농구","혼성빅발리볼"].map(s=>`<option ${m.sport===s?"selected":""}>${s}</option>`).join("")}
+        </select>
+        <select data-editidx="${i}" data-field="grade">
+          <option value="1" ${m.grade===1?"selected":""}>1학년</option>
+          <option value="2" ${m.grade===2?"selected":""}>2학년</option>
+        </select>
+      </div>
+      <div class="sched-edit-row">
+        <input type="text" data-editidx="${i}" data-field="a" value="${m.a}">
+        <input type="text" data-editidx="${i}" data-field="b" value="${m.b}">
+        <select data-editidx="${i}" data-field="venue">
+          <option ${m.venue==="체육관"?"selected":""}>체육관</option>
+          <option ${m.venue==="운동장"?"selected":""}>운동장</option>
+        </select>
+        <select data-editidx="${i}" data-field="priority">
+          <option value="false" ${!m.priority?"selected":""}>일반</option>
+          <option value="true" ${m.priority?"selected":""}>우선급식</option>
+        </select>
+      </div>
+      <div class="sched-edit-row">
+        <input type="text" data-editidx="${i}" data-field="label" value="${m.label||""}" placeholder="라벨 (선택)">
+      </div>
+      <div class="sched-edit-actions">
+        <button class="sched-btn primary" onclick="saveMatch(${i})">저장</button>
+        <button class="sched-btn danger" onclick="deleteMatch(${i})">삭제</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+function saveMatch(i){
+  const sched=loadSchedule();
+  const inputs=document.querySelectorAll(`[data-editidx="${i}"]`);
+  inputs.forEach(el=>{
+    const f=el.dataset.field;
+    let v=el.value;
+    if(f==="grade") v=parseInt(v);
+    if(f==="priority") v=(v==="true");
+    if(f==="label" && !v) { delete sched[i].label; return; }
+    sched[i][f]=v;
+  });
+  saveSchedule(sched);
+  alert("경기 정보가 저장되었습니다.");
+  renderEditList();
+}
+function deleteMatch(i){
+  if(!confirm("이 경기를 삭제하시겠습니까?")) return;
+  const sched=loadSchedule();
+  sched.splice(i,1);
+  saveSchedule(sched);
+  renderEditList();
+}
+function addMatch(){
+  const nm={
+    date:document.getElementById("newDate").value,
+    time:document.getElementById("newTime").value,
+    sport:document.getElementById("newSport").value,
+    grade:parseInt(document.getElementById("newGrade").value),
+    a:document.getElementById("newA").value,
+    b:document.getElementById("newB").value,
+    venue:document.getElementById("newVenue").value,
+    priority:document.getElementById("newPriority").value==="true"
+  };
+  const lbl=document.getElementById("newLabel").value;
+  if(lbl) nm.label=lbl;
+  if(!nm.date||!nm.time||!nm.a||!nm.b){ alert("날짜, 시간, 팀명은 필수입니다."); return; }
+  const sched=loadSchedule();
+  sched.push(nm);
+  saveSchedule(sched);
+  ["newTime","newA","newB","newLabel"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("datePickerEdit").value=nm.date;
+  renderEditList();
+  alert("경기가 추가되었습니다.");
+}
+
+// ===== INIT =====
+initDatePickers();
+renderToday();
+</script>
+</body>
+</html>
