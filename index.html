@@ -195,6 +195,53 @@ body{min-height:100vh;padding-bottom:20px}
   .hero{padding:38px 20px 30px}
 }
 </style>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, onSnapshot, setDoc } 
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBg3Bcx-botbX7Q-hFDU1-ImkEMGp91R24",
+    authDomain: "namak-tournament.firebaseapp.com",
+    projectId: "namak-tournament",
+    storageBucket: "namak-tournament.firebasestorage.app",
+    messagingSenderId: "627310417163",
+    appId: "1:627310417163:web:3cb09548be56627f297e0e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const docRef = doc(db, "tournaments", "namak");
+
+  // 다른 스크립트에서 호출할 저장 함수
+  window.__cloudSave = async (key, value) => {
+    try {
+      await setDoc(docRef, { [key]: value }, { merge: true });
+    } catch(e) { console.error("클라우드 저장 실패:", e); }
+  };
+
+  // 실시간 구독: 다른 기기에서 변경되면 자동 반영
+  window.__cloudReady = false;
+  onSnapshot(docRef, (snap) => {
+    const data = snap.data() || {};
+    const keys = ["namak_results","namak_rosters","namak_schedule","namak_seeds","namak_notice"];
+    let changed = false;
+    keys.forEach(k => {
+      if (data[k] !== undefined) {
+        const newVal = JSON.stringify(data[k]);
+        if (localStorage.getItem(k) !== newVal) {
+          localStorage.setItem(k, newVal);
+          changed = true;
+        }
+      }
+    });
+    window.__cloudReady = true;
+    if (changed && typeof window.__rerenderAll === "function") {
+      window.__rerenderAll();
+    }
+  }, (err) => console.error("클라우드 구독 실패:", err));
+</script>
+
 </head>
 <body>
 
@@ -364,22 +411,39 @@ let currentBracketSport = "dodge";
 let currentBracketGrade = 1;
 
 // ===== STORAGE =====
+const _cloud = (k, v) => { if (window.__cloudSave) window.__cloudSave(k, v); };
+
 const loadResults = () => JSON.parse(localStorage.getItem("namak_results")||"{}");
-const saveResults = r => localStorage.setItem("namak_results", JSON.stringify(r));
+const saveResults = r => { 
+  localStorage.setItem("namak_results", JSON.stringify(r)); 
+  _cloud("namak_results", r);
+};
 const loadRosters = () => Object.assign({}, DEFAULT_ROSTERS, JSON.parse(localStorage.getItem("namak_rosters")||"{}"));
-const saveRostersLocal = r => localStorage.setItem("namak_rosters", JSON.stringify(r));
+const saveRostersLocal = r => { 
+  localStorage.setItem("namak_rosters", JSON.stringify(r)); 
+  _cloud("namak_rosters", r);
+};
 const loadSchedule = () => {
   const s = localStorage.getItem("namak_schedule");
   return s ? JSON.parse(s) : DEFAULT_SCHEDULE.slice();
 };
-const saveSchedule = s => localStorage.setItem("namak_schedule", JSON.stringify(s));
+const saveSchedule = s => { 
+  localStorage.setItem("namak_schedule", JSON.stringify(s)); 
+  _cloud("namak_schedule", s);
+};
 const loadSeeds = () => {
   const s = localStorage.getItem("namak_seeds");
   return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_SEEDS));
 };
-const saveSeedsLocal = s => localStorage.setItem("namak_seeds", JSON.stringify(s));
+const saveSeedsLocal = s => { 
+  localStorage.setItem("namak_seeds", JSON.stringify(s)); 
+  _cloud("namak_seeds", s);
+};
 const loadNotice = () => JSON.parse(localStorage.getItem("namak_notice")||'{"text":"","urgent":false}');
-const saveNotice = n => localStorage.setItem("namak_notice", JSON.stringify(n));
+const saveNotice = n => { 
+  localStorage.setItem("namak_notice", JSON.stringify(n)); 
+  _cloud("namak_notice", n);
+};
 const matchKey = m => `${m.date}_${m.time}_${m.sport}_${m.grade}_${m.a}_${m.b}`;
 
 // ===== UTILS =====
@@ -989,6 +1053,16 @@ function addMatch(){
   renderEditList();
   alert("경기가 추가되었습니다.");
 }
+
+// 클라우드에서 변경 감지 시 화면 새로고침
+window.__rerenderAll = function() {
+  try { if (typeof renderToday === "function") renderToday(); } catch(e){}
+  try { if (typeof renderResults === "function") renderResults(); } catch(e){}
+  try { if (typeof renderBracket === "function") renderBracket(); } catch(e){}
+  try { if (typeof renderMeal === "function") renderMeal(); } catch(e){}
+  try { if (typeof renderEditList === "function") renderEditList(); } catch(e){}
+  try { if (typeof renderRoster === "function") renderRoster(); } catch(e){}
+};
 
 // ===== INIT =====
 initDatePickers();
