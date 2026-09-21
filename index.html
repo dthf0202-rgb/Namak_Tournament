@@ -215,10 +215,12 @@ body{min-height:100vh;padding-bottom:20px}
 
   // 다른 스크립트에서 호출할 저장 함수
   window.__cloudSave = async (key, value) => {
-    try {
-      await setDoc(docRef, { [key]: value }, { merge: true });
-    } catch(e) { console.error("클라우드 저장 실패:", e); }
-  };
+  try {
+    // Firestore는 중첩 배열을 저장 못 하므로 문자열로 변환
+    const serialized = JSON.stringify(value);
+    await setDoc(docRef, { [key]: serialized }, { merge: true });
+  } catch(e) { console.error("클라우드 저장 실패:", e); }
+};
 
   // 실시간 구독: 다른 기기에서 변경되면 자동 반영
   window.__cloudReady = false;
