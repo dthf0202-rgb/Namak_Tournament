@@ -229,14 +229,15 @@ body{min-height:100vh;padding-bottom:20px}
     const keys = ["namak_results","namak_rosters","namak_schedule","namak_seeds","namak_notice"];
     let changed = false;
     keys.forEach(k => {
-      if (data[k] !== undefined) {
-        const newVal = JSON.stringify(data[k]);
-        if (localStorage.getItem(k) !== newVal) {
-          localStorage.setItem(k, newVal);
-          changed = true;
-        }
-      }
-    });
+  if (data[k] !== undefined) {
+    // 문자열(신규)이면 그대로, 객체(기존)면 문자열로 변환
+    const newVal = typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k]);
+    if (localStorage.getItem(k) !== newVal) {
+      localStorage.setItem(k, newVal);
+      changed = true;
+    }
+  }
+});
     window.__cloudReady = true;
     if (changed && typeof window.__rerenderAll === "function") {
       window.__rerenderAll();
